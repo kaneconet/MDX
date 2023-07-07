@@ -25,3 +25,6 @@
 4. データベース設計
 
   ![ER図](./images/er_diagram.png)
+
+5. インフラ構成
+  ![インフラ構成図](./images/Architecture.jpg)
