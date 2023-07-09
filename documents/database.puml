@@ -7,22 +7,36 @@ entity "Clinics" as clinics {
   clinic_name : varchar(255)
 }
 
-entity "Staffs" as staffs {
+entity "Branches" as branches {
   + id : int(11)
   ---
   clinic_id : int(11) [FK clinics.id]
+  branch_name : varchar(255)
+}
+
+entity "Staffs" as staffs {
+  + id : int(11)
+  ---
+  branch_id : int(11) [FK branches.id]
   staff_name : varchar(255)
   password : varchar(255)
   role : varchar(255)
+  physician_number : varchar(255) [nullable]
 }
 
 entity "Patients" as patients {
   + id : int(11)
   ---
-  clinic_id : int(11) [FK clinics.id]
+  branch_id : int(11) [FK branches.id]
   patient_number : int(11)
   old_hn : varchar(255)
   name : varchar(255)
+  native_name : varchar(255)
+  gender : varchar(255)
+  passport_number : varchar(255)
+  national_id : varchar(255)
+  phone_number : varchar(255)
+  email : varchar(255)
   date_of_birth : date
   notes : text
 }
@@ -30,7 +44,7 @@ entity "Patients" as patients {
 entity "MedicalRecords" as medical_records {
   + id : int(11)
   ---
-  clinic_id : int(11) [FK clinics.id]
+  branch_id : int(11) [FK branches.id]
   patient_id : int(11) [FK patients.id]
   staff_id : int(11) [FK staffs.id]
   date : date
@@ -42,16 +56,16 @@ entity "MedicalRecords" as medical_records {
 entity "Images" as images {
   + id : int(11)
   ---
-  clinic_id : int(11) [FK clinics.id]
+  branch_id : int(11) [FK branches.id]
   patient_id : int(11) [FK patients.id]
-  medical_record_id : int(11) [FK medical_records.id]
+  medical_record_id : int(11) [FK medical_records.id] [nullable]
   image_path : varchar(255)
 }
 
 entity "PhysicalInformation" as physical_information {
   + id : int(11)
   ---
-  clinic_id : int(11) [FK clinics.id]
+  branch_id : int(11) [FK branches.id]
   patient_id : int(11) [FK patients.id]
   measurement_datetime : datetime
   height : float
@@ -66,21 +80,23 @@ entity "PhysicalInformation" as physical_information {
 entity "VisitStatuses" as visit_statuses {
   + id : int(11)
   ---
-  clinic_id : int(11) [FK clinics.id]
+  branch_id : int(11) [FK branches.id]
   patient_id : int(11) [FK patients.id]
   status : varchar(255)
   checkin_time : datetime
   status_updated_at : datetime
 }
 
-clinics ||--o{ staffs
-clinics ||--o{ patients
-clinics ||--o{ medical_records
-clinics ||--o{ images
-clinics ||--o{ physical_information
-clinics ||--o{ visit_statuses
+clinics ||--o{ branches
+branches ||--o{ staffs
+branches ||--o{ patients
+branches ||--o{ medical_records
+branches ||--o{ images
+branches ||--o{ physical_information
+branches ||--o{ visit_statuses
 staffs ||--o{ medical_records
 patients ||--o{ medical_records
+medical_records ||--o{ images
 patients ||--o{ images
 patients ||--o{ physical_information
 patients ||--o{ visit_statuses
